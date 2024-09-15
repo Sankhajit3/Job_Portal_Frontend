@@ -4,6 +4,16 @@ import Signup from './components/auth/Signup'
 import Home from './components/Home'
 import Jobs from './components/Jobs'
 import Browse from './components/Browse'
+import Profile from './components/Profile'
+import JobDescription from './components/JobDescription'
+import Companies from './components/recruiter/Companies'
+import CompanyCreate from './components/recruiter/CompanyCreate'
+import CompanySetup from './components/recruiter/CompanySetup'
+import JobsRecruiter from './components/recruiter/JobsRecruiter'
+import PostJobs from './components/recruiter/PostJob'
+import Applicants from './components/recruiter/Applicants'
+import ProtectedRoute from './components/recruiter/ProtectedRoute'
+
 
 
 const appRouter = createBrowserRouter([
@@ -24,8 +34,43 @@ const appRouter = createBrowserRouter([
     element: <Jobs />
   },
   {
+    path: '/description/:id',
+    element: <JobDescription/>
+  },
+  {
     path: '/browse',
     element: <Browse />
+  },
+  {
+    path: '/profile',
+    element: <Profile />
+  },
+
+  //recruiter start here
+
+  {
+    path:"/recruiter/companies",
+    element:<ProtectedRoute><Companies/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/companies/create",
+    element:<ProtectedRoute><CompanyCreate/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/companies/:id",
+    element:<ProtectedRoute><CompanySetup/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/jobs",
+    element:<ProtectedRoute><JobsRecruiter/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/jobs/create",
+    element:<ProtectedRoute><PostJobs/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/jobs/:id/applicants",
+    element:<ProtectedRoute><Applicants/></ProtectedRoute>
   },
 
 ])

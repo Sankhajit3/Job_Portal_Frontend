@@ -60,6 +60,9 @@ const Navbar = () => {
                 <li>
                   <Link to="/browse">Browse</Link>
                 </li>
+                <li>
+                  <Link to="/savedJob">Saved Job</Link>
+                </li>
               </>
             )}
           </ul>

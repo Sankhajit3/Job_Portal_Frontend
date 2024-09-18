@@ -13,6 +13,8 @@ import JobsRecruiter from './components/recruiter/JobsRecruiter'
 import PostJobs from './components/recruiter/PostJob'
 import Applicants from './components/recruiter/Applicants'
 import ProtectedRoute from './components/recruiter/ProtectedRoute'
+import JobSetup from './components/recruiter/JobSetup'
+import SavedJobs from './components/SavedJobs'
 
 
 
@@ -45,6 +47,10 @@ const appRouter = createBrowserRouter([
     path: '/profile',
     element: <Profile />
   },
+  {
+    path: '/savedJob',
+    element: <SavedJobs />
+  },
 
   //recruiter start here
 
@@ -63,6 +69,10 @@ const appRouter = createBrowserRouter([
   {
     path:"/recruiter/jobs",
     element:<ProtectedRoute><JobsRecruiter/></ProtectedRoute>
+  },
+  {
+    path:"/recruiter/job/:id",
+    element:<ProtectedRoute><JobSetup/></ProtectedRoute>
   },
   {
     path:"/recruiter/jobs/create",

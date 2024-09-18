@@ -65,6 +65,7 @@ const JobDescription = () => {
     };
     fetchSingleJob();
   }, [jobId, dispatch, user?._id]);
+
   return (
     <div className="max-w-7xl mx-auto my-10">
       <div className="flex items-center justify-between">

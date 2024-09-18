@@ -11,14 +11,19 @@ import {
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Edit2, MoreHorizontal, Trash2 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { COMPANY_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
+import { toast } from "sonner";
+import { deleteCompany } from "@/redux/companySlice";
 
 const Companiestable = () => {
   const navigate = useNavigate();
   const { companies,searchCompanyByText } = useSelector((store) => store.company);
   const companyList = Array.isArray(companies) ? companies : [];
   const [filterCompany,setFilterCompany] = useState(companyList);
+  const dispatch = useDispatch();
 
   useEffect(()=> {
     const filteredCompany = companyList.length >= 0 && companyList.filter((company) => {
@@ -30,6 +35,26 @@ const Companiestable = () => {
     setFilterCompany(filteredCompany);
 
   },[companyList,searchCompanyByText])
+
+  const deleteCompanyHandler = async (companyId) => {
+    try {
+      const res = await axios.delete(`${COMPANY_API_END_POINT}/delete/${companyId}`, {
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        // Remove the job from the Redux store
+        dispatch(deleteCompany(companyId));
+        // Update the local state to reflect the deleted job
+        setFilterCompany((prevJobs) => prevJobs.filter((company) => company._id !== companyId));
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete the job.");
+    }
+  };
+  
 
   return (
     <div>
@@ -73,7 +98,7 @@ const Companiestable = () => {
                         <Edit2 className="w-5" />
                         <span>Edit</span>
                       </div>
-                      <div className="flex items-center gap-2 w-fit cursor-pointer my-2">
+                      <div onClick={()=>deleteCompanyHandler(company._id)} className="flex items-center gap-2 w-fit cursor-pointer my-2">
                         <Trash2 className="w-5" />
                         <span>Delete</span>
                       </div>

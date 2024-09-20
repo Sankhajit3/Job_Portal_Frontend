@@ -15,6 +15,12 @@ import Applicants from './components/recruiter/Applicants'
 import ProtectedRoute from './components/recruiter/ProtectedRoute'
 import JobSetup from './components/recruiter/JobSetup'
 import SavedJobs from './components/SavedJobs'
+import AdminHome from './components/admin/AdminHome'
+import ProtectedAdminRoute from './components/admin/ProtectedAdminRoute'
+import AdminUsers from './components/admin/AdminUsers'
+import AdminJobs from './components/admin/AdminJobs'
+import AdminCompany from './components/admin/AdminCompanies'
+import AdminHomePage from './components/admin/AdminHomePage'
 
 
 
@@ -50,6 +56,26 @@ const appRouter = createBrowserRouter([
   {
     path: '/savedJob',
     element: <SavedJobs />
+  },
+  {
+    path: '/admin',
+    element: <ProtectedAdminRoute> <AdminHome/></ProtectedAdminRoute>
+  },
+  {
+    path: '/admin/home',
+    element: <ProtectedAdminRoute> <AdminHomePage/></ProtectedAdminRoute>
+  },
+  {
+    path: '/admin/users',
+    element: <ProtectedAdminRoute> <AdminUsers/></ProtectedAdminRoute>
+  },
+  {
+    path: '/admin/jobs',
+    element: <ProtectedAdminRoute> <AdminJobs/></ProtectedAdminRoute>
+  },
+  {
+    path: '/admin/company',
+    element: <ProtectedAdminRoute> <AdminCompany/></ProtectedAdminRoute>
   },
 
   //recruiter start here

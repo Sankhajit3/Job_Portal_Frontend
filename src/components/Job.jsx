@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const Job = ({ job }) => {
   const navigate = useNavigate();

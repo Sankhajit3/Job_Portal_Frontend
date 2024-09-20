@@ -115,6 +115,15 @@ const Navbar = () => {
                         </Button>
                       </div>
                     )}
+                    {user && user.role === "admin" && (
+                      <div className="flex w-fit items-center gap-2 cursor-pointer">
+                        <User2 />
+
+                        <Button variant="link">
+                          <Link to="/admin/home">Admin</Link>
+                        </Button>
+                      </div>
+                    )}
 
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut />

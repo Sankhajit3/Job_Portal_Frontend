@@ -3,7 +3,7 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
 import { LogOut, User2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -13,6 +13,7 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
 
   const logoutHandler = async () => {
     try {
@@ -30,49 +31,84 @@ const Navbar = () => {
     }
   };
 
+  // Dynamic style based on current route
+  const linkStyles = (path) => {
+    return location.pathname === path
+      ? "text-[#F83002] font-semibold"
+      : "hover:text-[#F83002] transition-all duration-300 ease-in-out";
+  };
+
   return (
-    <nav className="bg-white">
-      <div className="flex items-center justify-between max-w-7xl mx-auto h-16">
+    <nav className="sticky top-0 z-50">
+      <div className="flex items-center justify-between max-w-7xl mx-auto h-16 px-4 md:px-8">
+        {/* Logo */}
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-wide">
             Job <span className="text-[#F83002]">Portal</span>
           </h1>
         </div>
-        <div className="flex items-center gap-12">
-          <ul className="flex font-medium items-center gap-5">
+
+        {/* Nav Links */}
+        <div className="flex items-center gap-8">
+          <ul className="flex font-medium items-center gap-6 text-gray-700">
             {user && user.role === "recruiter" ? (
               <>
                 <li>
-                  <Link to="/recruiter/companies">Companies</Link>
+                  <Link
+                    to="/recruiter/companies"
+                    className={`pb-1 ${linkStyles("/recruiter/companies")}`}
+                  >
+                    Companies
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/recruiter/jobs">Jobs</Link>
+                  <Link
+                    to="/recruiter/jobs"
+                    className={`pb-1 ${linkStyles("/recruiter/jobs")}`}
+                  >
+                    Jobs
+                  </Link>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link to="/">Home</Link>
+                  <Link to="/" className={`pb-1 ${linkStyles("/")}`}>
+                    Home
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/jobs">Jobs</Link>
+                  <Link to="/jobs" className={`pb-1 ${linkStyles("/jobs")}`}>
+                    Jobs
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/browse">Browse</Link>
+                  <Link to="/browse" className={`pb-1 ${linkStyles("/browse")}`}>
+                    Browse
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/savedJob">Saved Job</Link>
+                  <Link
+                    to="/savedJob"
+                    className={`pb-1 ${linkStyles("/savedJob")}`}
+                  >
+                    Saved Job
+                  </Link>
                 </li>
               </>
             )}
           </ul>
+
+          {/* Auth Buttons */}
           {!user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Link to="/login">
-                <Button variant="outline">Login</Button>
+                <Button variant="outline" className="px-4 py-1.5">
+                  Login
+                </Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] hover:bg-[#3b0696]">
+                <Button className="px-4 py-1.5 bg-[#6A38C2] hover:bg-[#3b0696] transition-all duration-300 ease-in-out">
                   Signup
                 </Button>
               </Link>
@@ -80,57 +116,54 @@ const Navbar = () => {
           ) : (
             <Popover>
               <PopoverTrigger asChild>
-                {/* Wrap Avatar with a fragment to ensure a single child */}
-
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src={user?.profile?.profilePhoto || "https://cdn-icons-png.flaticon.com/512/9385/9385289.png"}
-                    alt="@shadcn"
+                    src={
+                      user?.profile?.profilePhoto ||
+                      "https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
+                    }
+                    alt="user avatar"
                   />
                 </Avatar>
               </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <div className="">
-                  <div className="flex gap-4 space-y-2">
-                    <Avatar className="cursor-pointer">
-                      <AvatarImage
-                        src={user?.profile?.profilePhoto || "https://cdn-icons-png.flaticon.com/512/9385/9385289.png"}
-                        alt="@shadcn"
-                      />
-                    </Avatar>
-                    <div>
-                      <h4 className="font-medium">{user?.fullname}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {user?.profile?.bio}
-                      </p>
-                    </div>
+              <PopoverContent className="w-72 p-4">
+                <div className="flex items-center gap-4">
+                  <Avatar>
+                    <AvatarImage
+                      src={
+                        user?.profile?.profilePhoto ||
+                        "https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
+                      }
+                      alt="user avatar"
+                    />
+                  </Avatar>
+                  <div>
+                    <h4 className="font-medium text-lg">{user?.fullname}</h4>
+                    <p className="text-sm text-gray-500">{user?.profile?.bio}</p>
                   </div>
-                  <div className="flex flex-col my-4 text-grey-600">
-                    {user && user.role === "student" && (
-                      <div className="flex w-fit items-center gap-2 cursor-pointer">
-                        <User2 />
-
-                        <Button variant="link">
-                          <Link to="/profile">View Profile</Link>
-                        </Button>
-                      </div>
-                    )}
-                    {user && user.role === "admin" && (
-                      <div className="flex w-fit items-center gap-2 cursor-pointer">
-                        <User2 />
-
-                        <Button variant="link">
-                          <Link to="/admin/home">Admin</Link>
-                        </Button>
-                      </div>
-                    )}
-
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <LogOut />
-                      <Button onClick={logoutHandler} variant="link">
-                        Logout
+                </div>
+                <div className="mt-4 space-y-3">
+                  {user && user.role === "student" && (
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <User2 />
+                      <Button variant="link">
+                        <Link to="/profile">View Profile</Link>
                       </Button>
                     </div>
+                  )}
+                  {user && user.role === "admin" && (
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <User2 />
+                      <Button variant="link">
+                        <Link to="/admin/home">Admin</Link>
+                      </Button>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <LogOut />
+                    <Button onClick={logoutHandler} variant="link">
+                      Logout
+                    </Button>
                   </div>
                 </div>
               </PopoverContent>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "../ui/button"; // Assuming you have an Input component
+import { Button } from "../ui/button";
 import {
   Table,
   TableBody,
@@ -72,7 +72,9 @@ const AdminJobs = () => {
     <div className="flex flex-col md:flex-row h-screen">
       <Sidebar />
       <div className="flex-grow p-4 md:p-6 overflow-auto">
-        <h1 className="text-4xl font-bold mb-6">Jobs Management</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 md:mb-6">
+          Jobs Management
+        </h1>
 
         {/* Search Box */}
         <div className="mb-6">
@@ -81,54 +83,56 @@ const AdminJobs = () => {
             placeholder="Search jobs by title or company"
             value={searchJobByText}
             onChange={(e) => setSearchJobByText(e.target.value)}
-            className="w-[60%] p-2 border border-gray-300 rounded"
+            className="w-full md:w-[60%] p-2 border border-gray-300 rounded"
           />
         </div>
 
         {filterJobs.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell>Created Company</TableCell>
-                <TableCell>Salary</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Job Type</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentJobs.map((job) => (
-                <TableRow key={job._id}>
-                  <TableCell>{job._id}</TableCell>
-                  <TableCell className="break-all">{job.title}</TableCell>
-                  <TableCell className="break-all">{job.company.name}</TableCell>
-                  <TableCell className="break-all">{job.salary} LPA</TableCell>
-                  <TableCell className="break-all">{job.location}</TableCell>
-                  <TableCell className="break-all">{job.jobType}</TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => deleteJob(job._id)}
-                      className="bg-red-500 text-white"
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table className="min-w-full text-sm">
+              <TableHeader>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Created Company</TableCell>
+                  <TableCell>Salary</TableCell>
+                  <TableCell>Location</TableCell>
+                  <TableCell>Job Type</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentJobs.map((job) => (
+                  <TableRow key={job._id}>
+                    <TableCell className="whitespace-nowrap">{job._id}</TableCell>
+                    <TableCell className="break-all">{job.title}</TableCell>
+                    <TableCell className="break-all">{job.company.name}</TableCell>
+                    <TableCell className="break-all">{job.salary} LPA</TableCell>
+                    <TableCell className="break-all">{job.location}</TableCell>
+                    <TableCell className="break-all">{job.jobType}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => deleteJob(job._id)}
+                        className="bg-red-500 text-white"
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         ) : (
           <p>No jobs available.</p>
         )}
 
         {/* Pagination Controls */}
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mt-4 space-y-4 md:space-y-0">
           <Button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="mr-2"
+            className="w-full md:w-auto"
           >
             Previous
           </Button>
@@ -138,7 +142,7 @@ const AdminJobs = () => {
           <Button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            className="ml-2"
+            className="w-full md:w-auto"
           >
             Next
           </Button>

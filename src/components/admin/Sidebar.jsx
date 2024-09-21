@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-
 import { Briefcase, Building, Home, LayoutDashboardIcon, LogOut, Menu, Users2Icon } from "lucide-react";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { setUser } from "@/redux/authSlice";
 
 const Sidebar = () => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false); // State for toggling sidebar
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
   const logoutHandler = async () => {
     try {
-      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
       if (res.data.success) {
         dispatch(setUser(null));
         navigate("/");
@@ -31,7 +27,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="relative h-screen flex">
+    <div className="flex">
       {/* Hamburger menu for mobile */}
       <div className="absolute top-4 left-4 md:hidden z-50">
         <Menu
@@ -44,7 +40,7 @@ const Sidebar = () => {
       <div
         className={`${
           expanded ? "left-0" : "-left-full"
-        } fixed top-0 z-40 w-64 h-full bg-gray-800 text-white p-6 transition-all duration-300 md:relative md:left-0 md:w-64`}
+        } fixed top-0 z-40 w-64 h-screen bg-gray-800 text-white p-6 transition-all duration-300 md:relative md:left-0 md:w-64`}
       >
         {/* Logo */}
         <div className="text-2xl font-bold mb-6">
@@ -53,7 +49,7 @@ const Sidebar = () => {
 
         {/* Navigation Menu */}
         <nav className="space-y-4">
-        <Link
+          <Link
             to="/"
             className="block mt-20 p-5 text-lg hover:bg-blue-500 rounded-md transition-colors"
             onClick={() => setExpanded(false)} // Close sidebar on click
@@ -95,6 +91,15 @@ const Sidebar = () => {
           <LogOut className="inline-block w-6 h-6 mr-2" />
           <span>Sign Out</span>
         </div>
+      </div>
+
+      {/* Main content */}
+      <div
+        className={`flex-1 p-4 transition-all duration-300 ${
+          expanded ? "md:ml-64" : ""
+        }`}
+      >
+       
       </div>
 
       {/* Background overlay when the sidebar is open on mobile */}

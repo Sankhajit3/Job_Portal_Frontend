@@ -1,17 +1,40 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { UilSignOutAlt, UilBars } from "@iconscout/react-unicons";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Briefcase, Building, Home, LayoutDashboardIcon, Users2Icon } from "lucide-react";
+
+import { Briefcase, Building, Home, LayoutDashboardIcon, LogOut, Menu, Users2Icon } from "lucide-react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { USER_API_END_POINT } from "@/utils/constant";
+import { toast } from "sonner";
+import { setUser } from "@/redux/authSlice";
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        dispatch(setUser(null));
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast(error.response.data.message);
+    }
+  };
 
   return (
     <div className="relative h-screen flex">
       {/* Hamburger menu for mobile */}
       <div className="absolute top-4 left-4 md:hidden z-50">
-        <UilBars
+        <Menu
           className="text-gray-800 h-6 w-6 cursor-pointer"
           onClick={() => setExpanded(!expanded)}
         />
@@ -68,8 +91,8 @@ const Sidebar = () => {
         </nav>
 
         {/* Sign Out Option */}
-        <div className="mt-20 cursor-pointer hover:bg-red-500 p-2 rounded-md transition-colors">
-          <UilSignOutAlt className="inline-block w-6 h-6 mr-2" />
+        <div onClick={logoutHandler} className="mt-20 cursor-pointer hover:bg-red-500 p-2 rounded-md transition-colors">
+          <LogOut className="inline-block w-6 h-6 mr-2" />
           <span>Sign Out</span>
         </div>
       </div>

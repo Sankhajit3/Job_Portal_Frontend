@@ -114,7 +114,7 @@ const RecruiterJobsTable = () => {
                         className="flex items-center w-fit gap-2 cursor-pointer mt-2"
                       >
                         <Eye className="w-5" />
-                        <span>Applicants</span>
+                        <span>Applicants </span>
                       </div>
                       <div  onClick={() => deleteJob(job._id)}  className="flex items-center gap-2 w-fit cursor-pointer mt-2">
                         <Trash2 className="w-5" />
